@@ -10,8 +10,8 @@
       </div>
     </header>
     <div class="container">
-      <Add/>
-      <List :comments="comments"/>
+      <Add :comments="comments" :addComment="addComment"/>
+      <List :comments="comments" :deleteComment="deleteComment"/>
     </div>
   </div>
 </template>
@@ -43,6 +43,14 @@
       Add,
       List
     },
+    methods: {
+      addComment(username, content) {    // 添加评论
+        this.comments.unshift({name: username, content: content})
+      },
+      deleteComment(index) {
+        this.comments.splice(index, 1)
+      }
+    }
   }
 </script>
 
