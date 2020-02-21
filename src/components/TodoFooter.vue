@@ -1,45 +1,48 @@
 <template>
   <div class="todo-footer">
     <label>
-      <input type="checkbox" v-model="isAllCheck"/>
+<!--      <input type="checkbox" v-model="isAllCheck"/>-->
+      <slot name="checkAll"></slot>
     </label>
     <span>
-          <span>已完成{{completeSize}}</span> / 全部{{todos.length}}
-        </span>
-    <button class="btn btn-danger" v-show="completeSize" @click="deleteCompleteItem">清除已完成任务</button>
+<!--          <span>已完成{{completeSize}} / 全部{{todos.length}}</span>-->
+      <slot name="count"></slot>
+    </span>
+<!--    <button class="btn btn-danger" v-show="completeSize" @click="deleteCompleteItem">清除已完成任务</button>-->
+    <slot name="delete"></slot>
   </div>
 </template>
 
 <script>
   export default {
     name: 'todoFooter',
-    props: {
-      todos: Array,
-      deleteCompleteTodos: Function,
-      selectAllTodos: Function
-    },
-    computed: {
-      completeSize() {
-        const {todos} = this
-        return todos.reduce((preTotal, todo) => preTotal + (todo.complete ? 1 : 0), 0)
-      },
-      isAllCheck: {
-        get() {
-          return this.completeSize === this.todos.length && this.completeSize > 0
-        },
-        set(value) {
-          this.selectAllTodos(value)
-        }
-      }
-    },
-    methods: {
-      deleteCompleteItem() {
-        const {deleteCompleteTodos} = this
-        if(window.confirm('sure?')) {
-          this.deleteCompleteTodos()
-        }
-      }
-    }
+    // props: {
+    //   todos: Array,
+    //   deleteCompleteTodos: Function,
+    //   selectAllTodos: Function
+    // },
+    // computed: {
+    //   completeSize () {
+    //     const {todos} = this
+    //     return todos.reduce((preTotal, todo) => preTotal + (todo.complete ? 1 : 0), 0)
+    //   },
+    //   isAllCheck: {
+    //     get () {
+    //       return this.completeSize === this.todos.length && this.completeSize > 0
+    //     },
+    //     set (value) {
+    //       this.selectAllTodos(value)
+    //     }
+    //   }
+    // },
+    // methods: {
+    //   deleteCompleteItem () {
+    //     const {deleteCompleteTodos} = this
+    //     if (window.confirm('sure?')) {
+    //       this.deleteCompleteTodos()
+    //     }
+    //   }
+    // }
   }
 </script>
 

@@ -3,7 +3,12 @@
     <div class="todo-wrap">
       <TodoHeader @addTodo="addTodo"/>    <!-- 给TodoHeader绑定addTodo事件监听 -->
       <TodoList :todos="todos"/>
-      <TodoFooter :todos="todos" :deleteCompleteTodos="deleteCompleteTodos" :selectAllTodos="selectAllTodos"/>
+<!--      <TodoFooter :todos="todos" :deleteCompleteTodos="deleteCompleteTodos" :selectAllTodos="selectAllTodos"/>-->
+      <TodoFooter>
+        <input slot="checkAll" type="checkbox" v-model="isAllCheck"/>
+        <span slot="count">已完成{{completeSize}} / 全部{{todos.length}}</span>
+        <button slot="delete" class="btn btn-danger" v-show="completeSize" @click="deleteCompleteItem">清除已完成任务</button>
+      </TodoFooter>
     </div>
   </div>
 </template>
@@ -38,6 +43,20 @@
         // ]
       }
     },
+    computed: {
+      completeSize () {
+        const {todos} = this
+        return todos.reduce((preTotal, todo) => preTotal + (todo.complete ? 1 : 0), 0)
+      },
+      isAllCheck: {
+        get () {
+          return this.completeSize === this.todos.length && this.completeSize > 0
+        },
+        set (value) {
+          this.selectAllTodos(value)
+        }
+      }
+    },
     mounted () {
       PubSub.subscribe('deleteTodo', (msg, data) => {    // 订阅消息
         this.deleteTodo(index)    // 使用 => 函数, this指向App.vue
@@ -55,6 +74,12 @@
       },
       selectAllTodos(check) {    // 全选 全不选
         this.todos.forEach(todo => todo.complete = check)
+      },
+      deleteCompleteItem () {
+        const {deleteCompleteTodos} = this
+        if (window.confirm('sure?')) {
+          this.deleteCompleteTodos()
+        }
       }
     },
     watch: {    // 监视
