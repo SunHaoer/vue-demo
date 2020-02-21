@@ -2,13 +2,19 @@
   <div class="todo-container">
     <div class="todo-wrap">
       <TodoHeader @addTodo="addTodo"/>    <!-- 给TodoHeader绑定addTodo事件监听 -->
-      <TodoList :todos="todos" :deleteTodo="deleteTodo"/>
+      <TodoList :todos="todos"/>
       <TodoFooter :todos="todos" :deleteCompleteTodos="deleteCompleteTodos" :selectAllTodos="selectAllTodos"/>
     </div>
   </div>
 </template>
 
+<!--
+绑定事件监听 ----  订阅消息
+触发事件 ---- 发布消息
+-->
+
 <script>
+  import PubSub from 'pubsub-js'
   import TodoHeader from './components/TodoHeader.vue'
   import TodoList from './components/TodoList.vue'
   import TodoFooter from './components/TodoFooter.vue'
@@ -31,6 +37,11 @@
         //   {title: '打代码', complete: true}
         // ]
       }
+    },
+    mounted () {
+      PubSub.subscribe('deleteTodo', (msg, data) => {    // 订阅消息
+        this.deleteTodo(index)    // 使用 => 函数, this指向App.vue
+      })
     },
     methods: {
       addTodo(todo) {
