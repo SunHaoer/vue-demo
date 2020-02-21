@@ -29,7 +29,8 @@
           complete: false
         }
         // 添加到todos
-        this.addTodo(todo)
+        //this.addTodo(todo)
+        this.$emit('addTodo', todo)    // 触发自定义事件
         // 清除输入框
         this.title = ''
       }
