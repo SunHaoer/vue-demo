@@ -23,12 +23,13 @@
     },
     data() {
       return {
-        todos: [
-          {title: '吃饭', complete: false},
-          {title: '睡觉', complete: false},
-          {title: '打代码', complete: true},
-          {title: '出去玩', complete: false}
-        ]
+        // 从localStorage读取todos
+        todos: JSON.parse(window.localStorage.getItem('todos_key') || '[]'),
+        // todos: [
+        //   {title: '吃饭', complete: false},
+        //   {title: '睡觉', complete: false},
+        //   {title: '打代码', complete: true}
+        // ]
       }
     },
     methods: {
@@ -43,6 +44,15 @@
       },
       selectAllTodos(check) {    // 全选 全不选
         this.todos.forEach(todo => todo.complete = check)
+      }
+    },
+    watch: {    // 监视
+      todos: {
+        deep: true,    // 深度监视
+        handler: function (value) {
+          // 将tudos最新json值保存到localStorage
+          window.localStorage.setItem('todos_key', JSON.stringify(value))
+        }
       }
     }
   }
