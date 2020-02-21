@@ -1,59 +1,62 @@
 <template>
-  <div>
-    <header class="site-header jumbotron">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <h1>请发表对Vue的评论</h1>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container">
-      <Add :comments="comments" :addComment="addComment"/>
-      <List :comments="comments" :deleteComment="deleteComment"/>
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <TodoHeader :addTodo="addTodo"/>
+      <TodoList :todos="todos" :deleteTodo="deleteTodo"/>
+      <TodoFooter :todos="todos" :deleteCompleteTodos="deleteCompleteTodos" :selectAllTodos="selectAllTodos"/>
     </div>
   </div>
 </template>
 
 <script>
-  import Add from './components/Add.vue'
-  import List from './components/List.vue'
+  import TodoHeader from './components/TodoHeader.vue'
+  import TodoList from './components/TodoList.vue'
+  import TodoFooter from './components/TodoFooter.vue'
+
   export default {
     name: 'App',
+    components: {TodoFooter, TodoList, TodoHeader},
+    comments: {
+      TodoHeader,
+      TodoList,
+      TodoFooter
+    },
     data() {
       return {
-        comments: [
-          {
-            name: 'Panda',
-            content: '还不错'
-          },
-          {
-            name: 'Cat',
-            content: '不好用'
-          },
-          {
-            name: 'Dog',
-            content: '还好玩'
-          }
+        todos: [
+          {title: '吃饭', complete: false},
+          {title: '睡觉', complete: false},
+          {title: '打代码', complete: true},
+          {title: '出去玩', complete: false}
         ]
       }
     },
-    components: {
-      Add,
-      List
-    },
     methods: {
-      addComment(username, content) {    // 添加评论
-        this.comments.unshift({name: username, content: content})
+      addTodo(todo) {
+        this.todos.unshift(todo)
       },
-      deleteComment(index) {
-        this.comments.splice(index, 1)
+      deleteTodo(index) {
+        this.todos.splice(index, 1)
+      },
+      deleteCompleteTodos() {    // 删除所有选中todos
+        this.todos = this.todos.filter(todo => !todo.complete)
+      },
+      selectAllTodos(check) {    // 全选 全不选
+        this.todos.forEach(todo => todo.complete = check)
       }
     }
   }
 </script>
 
 <style scoped>
+  .todo-container {
+    width: 600px;
+    margin: 0 auto;
+  }
+  .todo-container .todo-wrap {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
 
 </style>
