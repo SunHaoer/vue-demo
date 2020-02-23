@@ -20,6 +20,7 @@
 
 <script>
   import PubSub from 'pubsub-js'
+  import StorageUtil from './util/StorageUtil.js'
   import TodoHeader from './components/TodoHeader.vue'
   import TodoList from './components/TodoList.vue'
   import TodoFooter from './components/TodoFooter.vue'
@@ -35,7 +36,8 @@
     data() {
       return {
         // 从localStorage读取todos
-        todos: JSON.parse(window.localStorage.getItem('todos_key') || '[]'),
+        todos: StorageUtil.getTodos()
+        // todos: JSON.parse(window.localStorage.getItem('todos_key') || '[]'),
         // todos: [
         //   {title: '吃饭', complete: false},
         //   {title: '睡觉', complete: false},
@@ -85,10 +87,12 @@
     watch: {    // 监视
       todos: {
         deep: true,    // 深度监视
-        handler: function (value) {
-          // 将tudos最新json值保存到localStorage
-          window.localStorage.setItem('todos_key', JSON.stringify(value))
-        }
+        handler: StorageUtil.saveTodos
+        // handler: function (value) {
+        //   // 将tudos最新json值保存到localStorage
+        //   StorageUtil.saveTodos(value)
+        //   // window.localStorage.setItem('todos_key', JSON.stringify(value))
+        // }
       }
     }
   }
